@@ -41,3 +41,13 @@ SOME RANDOM TEXT
 """
     out = build_itinerary(text, year=2026)
     assert "KC 921" in out
+
+def test_route_with_star_suffix():
+    text = """
+1 TK 353Y 15MAR 7 ALAIST*SS1  0950  1410  /DCTK /E
+2 TK1875Y 15MAR 7 ISTMXP*SS1  1545  1635  /DCTK
+"""
+    out = build_itinerary(text, year=2026)
+    assert "TK 353" in out
+    assert "TK 1875" in out
+    assert "Пересадка" in out

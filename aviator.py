@@ -168,15 +168,20 @@ def parse_segment_line(line: str, year: int) -> Optional[Segment]:
         return None
 
     origin = dest = None
+    route_idx = None
+
     for i in range(date_idx + 1, len(tokens)):
         tok = tokens[i].upper()
 
-        if len(tok) == 6 and tok.isalpha():
-            origin, dest = tok[:3], tok[3:]
+        # ✅ NEW: если встречаем ALAIST*SS1, достаем первые 6 букв
+        m_route = re.match(r"^([A-Z]{6})", tok)
+        if m_route:
+            route6 = m_route.group(1)
+            origin, dest = route6[:3], route6[3:]
             route_idx = i
             break
 
-    if not origin:
+    if not origin or not dest:
         return None
 
     times = pick_times(tokens)
